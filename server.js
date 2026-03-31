@@ -5,7 +5,7 @@ const app = express();
 
 const CLIENT_ID = '1208502827920531586';
 const CLIENT_SECRET = 'SRwpQt3pRMQNQLZAIZdFF1ky2Jjve7tW';
-const REDIRECT_URI = 'http://localhost:3000/callback';
+const REDIRECT_URI = 'https://v-nas-portal.vercel.app/';
 
 app.use(session({
   secret: 'secret',
