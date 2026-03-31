@@ -3,8 +3,8 @@ const session = require('express-session');
 const axios = require('axios');
 const app = express();
 
-const CLIENT_ID = 'DIN_CLIENT_ID';
-const CLIENT_SECRET = 'DIN_SECRET';
+const CLIENT_ID = '1208502827920531586';
+const CLIENT_SECRET = 'SRwpQt3pRMQNQLZAIZdFF1ky2Jjve7tW';
 const REDIRECT_URI = 'http://localhost:3000/callback';
 
 app.use(session({
