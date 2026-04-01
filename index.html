@@ -3,283 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vNAS Hub | Professional Flight Management</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>vNAS | Crew Command Center</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --nas-red: #e71c2a;
-            --nas-blue: #15273f;
-            --nas-bg: #f8f9fa;
-            --nas-card: #ffffff;
-            --nas-border: #e2e8f0;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --sidebar-width: 280px;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --nas-red: #d71921;
+            --nas-dark: #002244;
+            --nas-silver: #f2f2f2;
+            --nas-border: #e0e0e0;
+            --text-main: #1a1a1a;
+            --sidebar-width: 240px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
-        body { background: var(--nas-bg); color: var(--text-main); overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body { background-color: #ffffff; color: var(--text-main); line-height: 1.6; }
 
         .hidden { display: none !important; }
 
-        /* --- AUTH SCREEN --- */
+        /* --- AUTHENTICATION (NORWEGIAN STYLE) --- */
         #loginSection {
             height: 100vh;
-            background: linear-gradient(rgba(21, 39, 63, 0.7), rgba(21, 39, 63, 0.7)), url('https://images.unsplash.com/photo-1436491865332-7a61a109c0f3?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            display: flex; align-items: center; justify-content: center;
+            background: #ffffff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .login-box {
-            background: white; border-top: 6px solid var(--nas-red);
-            padding: 3rem; width: 450px; border-radius: 4px; text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        .login-container { text-align: center; max-width: 400px; width: 100%; padding: 20px; }
+        .logo-large { font-size: 3rem; font-weight: 900; letter-spacing: -2px; color: var(--nas-dark); margin-bottom: 5px; }
+        .logo-large span { color: var(--nas-red); }
+        .discord-btn {
+            background: #5865F2; color: white; border: none; width: 100%; padding: 16px;
+            border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            transition: opacity 0.2s; margin-top: 30px;
         }
+        .discord-btn:hover { opacity: 0.9; }
 
-        /* --- SIDEBAR --- */
+        /* --- LAYOUT --- */
         #dashboardSection { display: none; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100vh; }
-        
+
+        /* Sidebar Navigation */
         aside {
-            background: white; border-right: 1px solid var(--nas-border);
-            display: flex; flex-direction: column; padding: 1.5rem;
+            background: var(--nas-silver); border-right: 1px solid var(--nas-border);
+            display: flex; flex-direction: column; padding: 30px 20px;
             position: sticky; top: 0; height: 100vh;
         }
-        .brand { padding: 1rem 0 3rem; font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; }
-        .brand span { color: var(--nas-red); }
-
-        .nav-group { margin-bottom: 2rem; }
-        .nav-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; letter-spacing: 1px; }
-        
-        .nav-item {
-            display: flex; align-items: center; gap: 12px; padding: 12px 16px;
-            border-radius: 6px; color: var(--text-muted); text-decoration: none;
-            font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition);
-            margin-bottom: 4px;
+        .nav-link {
+            padding: 12px 15px; margin-bottom: 5px; border-radius: 4px;
+            color: #555; text-decoration: none; font-weight: 500; font-size: 0.95rem;
+            display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s;
         }
-        .nav-item:hover { background: #f1f5f9; color: var(--nas-red); }
-        .nav-item.active { background: var(--nas-blue); color: white; }
+        .nav-link:hover { background: #e0e0e0; color: var(--nas-red); }
+        .nav-link.active { background: var(--nas-red); color: white; }
 
-        /* --- MAIN CONTENT --- */
-        main { padding: 2rem 3rem; width: 100%; max-width: 1600px; }
+        /* Header */
+        header {
+            padding: 20px 40px; border-bottom: 1px solid var(--nas-border);
+            display: flex; justify-content: space-between; align-items: center;
+            background: #fff;
+        }
+        .pilot-info { display: flex; align-items: center; gap: 15px; }
+        .avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: #eee; border: 1px solid var(--nas-border); }
+
+        /* Main Content Grid */
+        main { padding: 40px; }
+        .page-title { font-size: 2rem; font-weight: 300; margin-bottom: 30px; letter-spacing: -0.5px; }
         
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .lang-switch { display: flex; gap: 5px; background: #e2e8f0; padding: 4px; border-radius: 20px; }
-        .lang-btn { border: none; padding: 4px 12px; border-radius: 15px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: var(--transition); }
-        .lang-btn.active { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .section-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+        
+        /* Functional Components */
+        .card { border-top: 3px solid var(--nas-red); background: white; margin-bottom: 40px; }
+        .card-h { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 20px; }
 
-        /* --- CARDS & GRID --- */
-        .cockpit-grid { display: grid; grid-template-columns: 1fr 1fr 320px; gap: 1.5rem; }
-        .card { background: white; border: 1px solid var(--nas-border); border-radius: 8px; padding: 1.5rem; position: relative; }
-        .card-header { display: flex; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
-        .card-header h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--nas-blue); }
-
-        /* --- FORMS --- */
-        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-        .input-group { display: flex; flex-direction: column; gap: 6px; }
-        label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); }
+        /* Dispatch Form */
+        .dispatch-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .input-box { display: flex; flex-direction: column; }
+        .input-box label { font-size: 0.75rem; font-weight: 700; margin-bottom: 8px; color: #444; }
         input, select { 
-            padding: 10px; border: 1px solid var(--nas-border); border-radius: 6px; 
-            font-size: 0.9rem; transition: var(--transition);
+            padding: 12px; border: 1px solid var(--nas-border); border-radius: 2px;
+            font-size: 1rem; outline: none; background: #fafafa;
         }
-        input:focus { border-color: var(--nas-red); outline: none; box-shadow: 0 0 0 3px rgba(231, 28, 42, 0.1); }
+        input:focus { border-color: var(--nas-red); background: #fff; }
+        .btn-submit { 
+            grid-column: span 2; background: var(--nas-red); color: white; border: none;
+            padding: 15px; font-weight: bold; text-transform: uppercase; cursor: pointer;
+            letter-spacing: 1px; margin-top: 10px;
+        }
 
-        .btn-dispatch { 
-            grid-column: span 2; background: var(--nas-red); color: white; border: none; 
-            padding: 14px; border-radius: 6px; font-weight: 800; text-transform: uppercase;
-            margin-top: 10px; cursor: pointer; transition: var(--transition);
-        }
-        .btn-dispatch:hover { background: var(--nas-blue); transform: translateY(-1px); }
+        /* Stats Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; padding: 12px; font-size: 0.75rem; color: #999; border-bottom: 2px solid var(--nas-silver); }
+        td { padding: 15px 12px; border-bottom: 1px solid var(--nas-silver); font-size: 0.9rem; }
+        .status { padding: 4px 8px; font-size: 0.7rem; font-weight: bold; border-radius: 2px; }
+        .status.active { background: #e8f5e9; color: #2e7d32; }
 
-        /* --- LIVE ELEMENTS --- */
-        #map-placeholder { 
-            height: 250px; background: #cbd5e1; border-radius: 6px; margin-top: 1rem;
-            display: flex; align-items: center; justify-content: center; position: relative;
-            overflow: hidden;
-        }
-        .flight-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f8fafc; }
-        .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
-        .status-active { background: #dcfce7; color: #166534; }
-
-        /* --- NOTIFICATIONS --- */
-        #toast {
-            position: fixed; bottom: 20px; right: 20px; background: var(--nas-blue); color: white;
-            padding: 16px 24px; border-radius: 8px; font-weight: 600; display: none;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); z-index: 1000;
-        }
+        /* Utility */
+        .lang-toggle { font-size: 0.7rem; font-weight: bold; cursor: pointer; color: #999; }
+        .lang-toggle span.active { color: var(--nas-red); }
     </style>
 </head>
 <body>
 
-    <div id="loginSection">
-        <div class="login-box">
-            <h1 class="brand" style="font-size: 2.5rem;">vNAS<span>.</span></h1>
-            <p style="margin-bottom: 2rem; color: var(--text-muted);">Virtual Norwegian Airline System Hub</p>
-            <button onclick="loginWithDiscord()" style="background:#5865F2; border:none; width:100%; padding:15px; color:white; border-radius:6px; font-weight:700; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; gap:10px;">
-                <i class="fab fa-discord"></i> AUTHENTICATE WITH DISCORD
+    <section id="loginSection">
+        <div class="login-container">
+            <div class="logo-large">vNAS<span>.</span></div>
+            <p style="color: #666; font-size: 0.9rem;">Norwegian Virtual Airline Operations</p>
+            <button class="discord-btn" onclick="loginWithDiscord()">
+                <i class="fab fa-discord"></i> SIGN IN WITH DISCORD
             </button>
+            <p style="margin-top: 40px; font-size: 0.7rem; color: #ccc;">FOR AUTHORIZED PERSONNEL ONLY</p>
         </div>
-    </div>
+    </section>
 
     <div id="dashboardSection">
         <aside>
-            <div class="brand">vNAS<span>.</span> Hub</div>
-            
-            <div class="nav-group">
-                <div class="nav-label" data-en="Flight Operations" data-no="Flyoperasjoner">Flight Operations</div>
-                <div class="nav-item active" onclick="showPage('page-dashboard', this)"><i class="fas fa-desktop"></i> <span data-en="Operations" data-no="Operasjoner">Operations</span></div>
-                <div class="nav-item" onclick="showPage('page-dispatch', this)"><i class="fas fa-file-invoice"></i> <span data-en="Dispatch" data-no="Dispatch">Dispatch</span></div>
-                <div class="nav-item"><i class="fas fa-map"></i> <span data-en="Route Map" data-no="Rutekart">Route Map</span></div>
-            </div>
-
-            <div class="nav-group">
-                <div class="nav-label" data-en="Pilot Resources" data-no="Pilotressurser">Pilot Resources</div>
-                <div class="nav-item"><i class="fas fa-book"></i> <span data-en="Standard Procedures" data-no="SOP">Standard Procedures</span></div>
-                <div class="nav-item" onclick="showPage('page-profile', this)"><i class="fas fa-id-card"></i> <span data-en="My License" data-no="Min Lisens">My License</span></div>
-            </div>
-
-            <div style="margin-top: auto;">
-                <div class="nav-item" onclick="logout()" style="color: var(--nas-red);"><i class="fas fa-sign-out-alt"></i> <span data-en="Logout" data-no="Logg ut">Logout</span></div>
+            <div class="logo-large" style="font-size: 1.8rem; margin-bottom: 40px;">vNAS<span>.</span></div>
+            <nav>
+                <div class="nav-link active" onclick="showPage('ops', this)"><i class="fas fa-signal"></i> Operations</div>
+                <div class="nav-link" onclick="showPage('dispatch', this)"><i class="fas fa-paper-plane"></i> Flight Dispatch</div>
+                <div class="nav-link" onclick="showPage('logbook', this)"><i class="fas fa-book"></i> Pilot Logbook</div>
+                <div class="nav-link" onclick="showPage('profile', this)"><i class="fas fa-user-circle"></i> Profile</div>
+            </nav>
+            <div style="margin-top: auto; padding-top: 20px;">
+                <div class="nav-link" onclick="logout()" style="color: #888;"><i class="fas fa-power-off"></i> Logout</div>
             </div>
         </aside>
 
-        <main>
-            <div class="top-bar">
-                <div id="header-text">
-                    <h1 style="font-weight: 800;">Fleet Status Dashboard</h1>
-                    <p id="current-date" style="color: var(--text-muted); font-size: 0.9rem;"></p>
+        <section style="overflow-y: auto;">
+            <header>
+                <div class="lang-toggle">
+                    <span id="en-btn" class="active" onclick="toggleLang('en')">EN</span> / 
+                    <span id="no-btn" onclick="toggleLang('no')">NO</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 20px;">
-                    <div class="lang-switch">
-                        <button class="lang-btn active" onclick="setLang('en', this)">EN</button>
-                        <button class="lang-btn" onclick="setLang('no', this)">NO</button>
+                <div class="pilot-info">
+                    <div style="text-align: right;">
+                        <div id="u-name" style="font-weight: bold; font-size: 0.9rem;">LOADING...</div>
+                        <div id="u-rank" style="font-size: 0.7rem; color: var(--nas-red); font-weight: bold;">COMMANDER</div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 10px; background: white; padding: 6px 15px; border-radius: 30px; border: 1px solid var(--nas-border);">
-                        <img id="u-avatar" src="" style="width: 30px; height: 30px; border-radius: 50%;">
-                        <span id="u-name" style="font-weight: 700; font-size: 0.85rem;">PILOT</span>
-                    </div>
+                    <img id="u-avatar" class="avatar" src="">
                 </div>
-            </div>
+            </header>
 
-            <div id="page-dashboard" class="page-content cockpit-grid">
-                <div class="card" style="grid-column: span 2;">
-                    <div class="card-header">
-                        <h3 data-en="Recent Fleet Activity" data-no="Flåteaktivitet">Recent Fleet Activity</h3>
-                    </div>
-                    <div id="fleet-list">
+            <main>
+                <div id="ops" class="page">
+                    <h1 class="page-title" id="t-ops-title">Live Fleet Status</h1>
+                    <div class="section-grid">
+                        <div class="left">
+                            <div class="card">
+                                <p class="card-h">Current Operations</p>
+                                <table>
+                                    <thead>
+                                        <tr><th>Flight</th><th>Route</th><th>Aircraft</th><th>Status</th></tr>
+                                    </thead>
+                                    <tbody id="fleet-table">
+                                        </tbody>
+                                </table>
+                            </div>
                         </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header"><h3 data-en="My Stats" data-no="Mine Tall">My Stats</h3></div>
-                    <div style="text-align: center; padding: 1rem 0;">
-                        <h2 style="font-size: 3rem; font-weight: 900; color: var(--nas-red);" id="stat-hours">128.4</h2>
-                        <p style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1px;">TOTAL BLOCK HOURS</p>
-                    </div>
-                    <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; display: flex; justify-content: space-between;">
-                        <div><p style="font-size: 0.7rem; color: var(--text-muted);">Flights</p><h4 id="stat-flights">42</h4></div>
-                        <div><p style="font-size: 0.7rem; color: var(--text-muted);">Points</p><h4>1,420</h4></div>
-                        <div><p style="font-size: 0.7rem; color: var(--text-muted);">Rank</p><h4 style="color: var(--nas-red);">CPT</h4></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="page-dispatch" class="page-content hidden cockpit-grid" style="grid-template-columns: 1fr 1fr;">
-                <div class="card">
-                    <div class="card-header"><h3 data-en="Flight Dispatcher" data-no="Flight Dispatcher">Flight Dispatcher</h3></div>
-                    <form id="dispatch-form" class="form-grid">
-                        <div class="input-group">
-                            <label data-en="Departure (ICAO)" data-no="Avgang (ICAO)">Departure (ICAO)</label>
-                            <input type="text" id="d-dep" placeholder="ENGM" required maxlength="4">
-                        </div>
-                        <div class="input-group">
-                            <label data-en="Arrival (ICAO)" data-no="Ankomst (ICAO)">Arrival (ICAO)</label>
-                            <input type="text" id="d-arr" placeholder="ENBR" required maxlength="4">
-                        </div>
-                        <div class="input-group">
-                            <label data-en="Aircraft" data-no="Flytype">Aircraft</label>
-                            <select id="d-acft">
-                                <option value="B738">Boeing 737-800</option>
-                                <option value="B38M">Boeing 737 MAX 8</option>
-                                <option value="B789">Boeing 787-9</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label data-en="Callsign" data-no="Callsign">Callsign</label>
-                            <input type="text" id="d-call" placeholder="NAX123" required>
-                        </div>
-                        <div class="input-group">
-                            <label data-en="Passengers" data-no="Passasjerer">Passengers</label>
-                            <input type="number" id="d-pax" value="180">
-                        </div>
-                        <div class="input-group">
-                            <label data-en="Cargo (kg)" data-no="Frakt (kg)">Cargo (kg)</label>
-                            <input type="number" id="d-cargo" value="1500">
-                        </div>
-                        <button type="submit" class="btn-dispatch" data-en="File Flight Plan" data-no="Send inn flyplan">File Flight Plan</button>
-                    </form>
-                </div>
-
-                <div class="card">
-                    <div class="card-header"><h3 data-en="Operational Preview" data-no="Operasjonell Forhåndsvisning">Operational Preview</h3></div>
-                    <div id="map-placeholder">
-                        <i class="fas fa-globe-europe fa-4x" style="color: #94a3b8;"></i>
-                        <p style="position: absolute; bottom: 20px; font-size: 0.7rem; color: #64748b; font-weight: bold;">LIVE TRACKING INTERFACE</p>
-                    </div>
-                    <div style="margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <div style="background: #f8fafc; padding: 10px; border-radius: 4px;">
-                            <label>EST. FUEL</label>
-                            <div style="font-weight: 800; color: var(--nas-red);">4,280 KG</div>
-                        </div>
-                        <div style="background: #f8fafc; padding: 10px; border-radius: 4px;">
-                            <label>EST. ETE</label>
-                            <div style="font-weight: 800; color: var(--nas-red);">01:05 HRS</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="page-profile" class="page-content hidden">
-                <div class="card" style="max-width: 600px; margin: 0 auto; border-left: 10px solid var(--nas-red);">
-                    <div class="card-header"><h3>Pilot Identification License</h3></div>
-                    <div style="display: flex; gap: 30px; align-items: center;">
-                        <img id="u-avatar-big" src="" style="width: 150px; height: 150px; border-radius: 8px; border: 4px solid var(--nas-bg);">
-                        <div>
-                            <h1 id="u-name-big" style="font-size: 2.5rem; font-weight: 900; letter-spacing: -1px;">PILOT NAME</h1>
-                            <p style="color: var(--nas-red); font-weight: 800;">CERTIFIED SENIOR CAPTAIN</p>
-                            <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                <div><label>PILOT ID</label><div style="font-weight: 800;">NAS-0822</div></div>
-                                <div><label>JOIN DATE</label><div style="font-weight: 800;">JAN 2024</div></div>
+                        <div class="right">
+                            <div class="card" style="background: var(--nas-silver); padding: 30px; border: none;">
+                                <p class="card-h">Total Flight Time</p>
+                                <div style="font-size: 3.5rem; font-weight: 200; line-height: 1;" id="stat-hours">0.0</div>
+                                <p style="font-size: 0.7rem; font-weight: bold; margin-top: 10px; color: #666;">BLOCK HOURS</p>
+                                <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                                        <span>Flights</span><strong id="stat-count">0</strong>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+
+                <div id="dispatch" class="page hidden">
+                    <h1 class="page-title">Flight Dispatch</h1>
+                    <div class="card" style="max-width: 700px; padding: 40px; border: 1px solid var(--nas-border); border-top: 4px solid var(--nas-red);">
+                        <p class="card-h">Manual Flight Filing</p>
+                        <form id="f-dispatch" class="dispatch-form">
+                            <div class="input-box">
+                                <label>DEP ICAO</label>
+                                <input type="text" id="d-dep" placeholder="ENGM" required maxlength="4">
+                            </div>
+                            <div class="input-box">
+                                <label>ARR ICAO</label>
+                                <input type="text" id="d-arr" placeholder="ENBR" required maxlength="4">
+                            </div>
+                            <div class="input-box">
+                                <label>AIRCRAFT</label>
+                                <select id="d-acft">
+                                    <option value="B738">Boeing 737-800</option>
+                                    <option value="B38M">Boeing 737 MAX 8</option>
+                                    <option value="B789">Boeing 787-9 Dreamliner</option>
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <label>CALLSIGN</label>
+                                <input type="text" id="d-call" placeholder="NAX123" required>
+                            </div>
+                            <button type="submit" class="btn-submit">Dispatch Flight</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="logbook" class="page hidden">
+                    <h1 class="page-title">Pilot Logbook</h1>
+                    <div class="card">
+                        <p class="card-h">Full History</p>
+                        <table id="log-table">
+                            <thead><tr><th>Date</th><th>Callsign</th><th>Route</th><th>Duration</th></tr></thead>
+                            <tbody id="log-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </section>
     </div>
 
-    <div id="toast">Flight Plan Filed Successfully</div>
-
     <script>
-        const CLIENT_ID = '1429242117506470019'; 
+        const CLIENT_ID = '1429242117506470019';
         const REDIRECT_URI = window.location.href.split('#')[0];
 
-        // Language Handling
-        let currentLang = 'en';
-        function setLang(lang, btn) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            document.querySelectorAll('[data-' + lang + ']').forEach(el => {
-                el.innerText = el.getAttribute('data-' + lang);
-            });
+        // Translation Data
+        const translations = {
+            en: { ops: "Live Fleet Status", welcome: "Welcome, Captain" },
+            no: { ops: "Live Flåtestatus", welcome: "Velkommen, Kaptein" }
+        };
+
+        function toggleLang(lang) {
+            document.getElementById('en-btn').className = lang === 'en' ? 'active' : '';
+            document.getElementById('no-btn').className = lang === 'no' ? 'active' : '';
+            document.getElementById('t-ops-title').innerText = translations[lang].ops;
         }
 
-        function showPage(pageId, navEl) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        function showPage(pageId, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             document.getElementById(pageId).classList.remove('hidden');
-            navEl.classList.add('active');
+            el.classList.add('active');
         }
 
         function loginWithDiscord() {
@@ -288,8 +246,6 @@
         }
 
         window.onload = () => {
-            document.getElementById('current-date').innerText = new Date().toLocaleDateString('no-NO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            
             const fragment = new URLSearchParams(window.location.hash.slice(1));
             const accessToken = fragment.get('access_token');
 
@@ -302,67 +258,66 @@
                 })
                 .then(res => res.json())
                 .then(user => {
-                    const name = user.username.toUpperCase();
-                    document.getElementById('u-name').innerText = name;
-                    document.getElementById('u-name-big').innerText = name;
-                    const url = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-                    document.getElementById('u-avatar').src = url;
-                    document.getElementById('u-avatar-big').src = url;
+                    document.getElementById('u-name').innerText = user.username.toUpperCase();
+                    if (user.avatar) {
+                        document.getElementById('u-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                    }
                 });
-                renderFlights();
+                renderData();
             }
         };
 
-        // Dispatch Logic
-        document.getElementById('dispatch-form').onsubmit = (e) => {
+        document.getElementById('f-dispatch').onsubmit = (e) => {
             e.preventDefault();
-            const f = {
+            const flight = {
+                id: Date.now(),
                 call: document.getElementById('d-call').value.toUpperCase(),
-                route: `${document.getElementById('d-dep').value.toUpperCase()} → ${document.getElementById('d-arr').value.toUpperCase()}`,
+                route: `${document.getElementById('d-dep').value.toUpperCase()} - ${document.getElementById('d-arr').value.toUpperCase()}`,
                 acft: document.getElementById('d-acft').value,
-                pax: document.getElementById('d-pax').value,
-                status: 'EN ROUTE'
+                date: new Date().toLocaleDateString(),
+                dur: "01:15"
             };
             
-            let db = JSON.parse(localStorage.getItem('vnas_db_v2')) || [];
-            db.unshift(f);
-            localStorage.setItem('vnas_db_v2', JSON.stringify(db));
+            let db = JSON.parse(localStorage.getItem('vnas_log')) || [];
+            db.unshift(flight);
+            localStorage.setItem('vnas_log', JSON.stringify(db));
             
-            const t = document.getElementById('toast');
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
-            
-            renderFlights();
-            showPage('page-dashboard', document.querySelectorAll('.nav-item')[0]);
+            alert("Flight Dispatched Successfully!");
+            e.target.reset();
+            renderData();
+            showPage('ops', document.querySelectorAll('.nav-link')[0]);
         };
 
-        function renderFlights() {
-            const db = JSON.parse(localStorage.getItem('vnas_db_v2')) || [
-                {call: 'NAX72Y', route: 'ENGM → ENBR', acft: 'B738', status: 'ARRIVED', pax: 184}
-            ];
-            const list = document.getElementById('fleet-list');
-            list.innerHTML = '';
+        function renderData() {
+            const logs = JSON.parse(localStorage.getItem('vnas_log')) || [];
+            const fleetBody = document.getElementById('fleet-table');
+            const logBody = document.getElementById('log-body');
             
-            db.forEach(f => {
-                list.innerHTML += `
-                    <div class="flight-row">
-                        <div>
-                            <div style="font-weight: 800; color: var(--nas-blue);">${f.call}</div>
-                            <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">${f.acft}</div>
-                        </div>
-                        <div style="font-weight: 700; font-size: 0.9rem;">${f.route}</div>
-                        <div><span class="status-pill status-active">${f.status}</span></div>
-                    </div>
-                `;
+            fleetBody.innerHTML = '';
+            logBody.innerHTML = '';
+
+            logs.forEach((f, i) => {
+                const row = `<tr>
+                    <td><strong>${f.call}</strong></td>
+                    <td>${f.route}</td>
+                    <td>${f.acft}</td>
+                    <td><span class="status active">EN ROUTE</span></td>
+                </tr>`;
+                if(i < 5) fleetBody.innerHTML += row;
+
+                logBody.innerHTML += `<tr>
+                    <td>${f.date}</td>
+                    <td>${f.call}</td>
+                    <td>${f.route}</td>
+                    <td>${f.dur}</td>
+                </tr>`;
             });
-            
-            document.getElementById('stat-flights').innerText = db.length;
-            document.getElementById('stat-hours').innerText = (128.4 + (db.length * 1.2)).toFixed(1);
+
+            document.getElementById('stat-count').innerText = logs.length;
+            document.getElementById('stat-hours').innerText = (logs.length * 1.2).toFixed(1);
         }
 
-        function logout() {
-            window.location.href = REDIRECT_URI;
-        }
+        function logout() { window.location.href = REDIRECT_URI; }
     </script>
 </body>
 </html>
