@@ -7,145 +7,296 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-red: #e71c2a;
-            --dark-blue: #15273f;
-            --bg-white: #f8f9fa;
-            --sidebar-width: 260px;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --radius: 10px;
+            --nas-red: #e71c2a;
+            --nas-blue: #15273f;
+            --nas-grey: #f2f2f2;
+            --nas-text: #2d2d2d;
+            --sidebar-width: 280px;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-white); color: #333; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+        
+        body { 
+            background-color: #ffffff; 
+            color: var(--nas-text); 
+            overflow-x: hidden;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         /* --- LOGIN SCREEN --- */
         #loginSection {
             height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, var(--dark-blue) 0%, #1c3a5f 100%);
+            justify-content: center;
+            background: linear-gradient(rgba(21, 39, 63, 0.05), rgba(21, 39, 63, 0.05)), url('https://www.norwegian.com/globalassets/ip-images/hero-images/b737_hero.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         .login-card {
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: rgba(255, 255, 255, 0.98);
+            padding: 4rem 3rem;
+            border-radius: 2px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
             text-align: center;
-            width: 90%;
-            max-width: 400px;
-            border-top: 6px solid var(--primary-red);
+            width: 100%;
+            max-width: 450px;
+            border-top: 8px solid var(--nas-red);
+            animation: slideUp 0.6s ease-out;
         }
+
+        .logo-text { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem; color: var(--nas-blue); }
+        .logo-text span { color: var(--nas-red); }
 
         .discord-btn {
             background-color: #5865F2;
             color: white;
-            text-decoration: none;
-            padding: 14px;
-            border-radius: var(--radius);
-            font-weight: bold;
+            padding: 16px;
+            border-radius: 4px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             cursor: pointer;
             border: none;
             width: 100%;
-            font-size: 1rem;
+            transition: var(--transition);
+            margin-top: 2rem;
+            text-decoration: none;
         }
 
-        /* --- DASHBOARD (Hidden by default) --- */
-        #dashboardSection { display: none; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100vh; }
+        .discord-btn:hover { background-color: #4752c4; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4); }
 
-        nav.sidebar { background-color: var(--dark-blue); color: white; padding: 2rem 1.5rem; display: flex; flex-direction: column; }
-        .brand { font-size: 1.5rem; font-weight: bold; margin-bottom: 3rem; }
-        .brand span { color: var(--primary-red); }
+        /* --- DASHBOARD LAYOUT --- */
+        #dashboardSection { 
+            display: none; 
+            grid-template-columns: var(--sidebar-width) 1fr; 
+            min-height: 100vh; 
+        }
 
-        .nav-links { list-style: none; flex-grow: 1; }
-        .nav-links a { color: #bdc3c7; text-decoration: none; padding: 12px 15px; display: flex; align-items: center; gap: 12px; border-radius: var(--radius); margin-bottom: 5px; }
-        .nav-links a.active, .nav-links a:hover { background: rgba(255,255,255,0.1); color: white; }
+        /* Sidebar */
+        nav.sidebar { 
+            background-color: white; 
+            border-right: 1px solid #eee;
+            padding: 2.5rem 1.5rem; 
+            display: flex; 
+            flex-direction: column;
+            z-index: 100;
+        }
 
-        .content { padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .nav-links { list-style: none; flex-grow: 1; margin-top: 2rem; }
+        .nav-links a { 
+            color: #666; 
+            text-decoration: none; 
+            padding: 14px 18px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            border-radius: 6px; 
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
 
-        .profile-snip { display: flex; align-items: center; gap: 12px; background: white; padding: 8px 16px; border-radius: 50px; box-shadow: var(--shadow); }
-        .avatar { width: 35px; height: 35px; border-radius: 50%; background: #eee; object-fit: cover; }
+        .nav-links a:hover, .nav-links a.active { 
+            background: var(--nas-grey); 
+            color: var(--nas-red); 
+        }
 
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        .card { background: white; border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 20px; }
-        .card-title { font-weight: bold; margin-bottom: 1.2rem; border-left: 4px solid var(--primary-red); padding-left: 10px; color: var(--dark-blue); }
+        /* Content Area */
+        .content { padding: 3rem; max-width: 1300px; margin: 0 auto; width: 100%; }
+        
+        .header-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 3rem;
+            animation: fadeIn 1s;
+        }
 
-        input, select, .btn-primary { width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #ddd; }
-        .btn-primary { background: var(--primary-red); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .profile-snip { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            padding: 10px 20px;
+            border-radius: 4px;
+            background: var(--nas-grey);
+        }
 
+        .avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; }
+
+        /* Functional Components */
+        .dashboard-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
+        
+        .card { 
+            background: white; 
+            border: 1px solid #eee;
+            padding: 2rem; 
+            margin-bottom: 30px;
+            transition: var(--transition);
+            animation: slideUp 0.6s ease-out;
+        }
+        .card:hover { border-color: #ccc; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+
+        .card-title { 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-weight: 700; 
+            margin-bottom: 2rem; 
+            color: var(--nas-blue);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-title::after { content: ''; width: 40px; height: 3px; background: var(--nas-red); display: block; margin-top: 8px; }
+
+        /* Form Styling */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.75rem; font-weight: 700; color: #888; margin-bottom: 8px; text-transform: uppercase; }
+        input { 
+            width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 4px; outline: none; font-size: 1rem;
+            transition: var(--transition);
+        }
+        input:focus { border-color: var(--nas-red); background: #fffafa; }
+
+        .btn-nas { 
+            background: var(--nas-red); 
+            color: white; 
+            border: none; 
+            padding: 16px 30px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            width: 100%;
+        }
+        .btn-nas:hover { background: var(--nas-blue); letter-spacing: 2px; }
+
+        /* Table */
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: #777; font-size: 0.8rem; padding: 10px; border-bottom: 1px solid #eee; }
-        td { padding: 12px 10px; border-bottom: 1px solid #f9f9f9; }
+        th { text-align: left; padding: 15px; background: var(--nas-grey); font-size: 0.7rem; text-transform: uppercase; color: #666; }
+        td { padding: 18px 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: #e8f5e9; color: #2e7d32; }
 
-        @media (max-width: 900px) { #dashboardSection { grid-template-columns: 1fr; } .sidebar { display: none; } .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 1000px) { 
+            #dashboardSection { grid-template-columns: 1fr; } 
+            .sidebar { display: none; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <div id="loginSection">
         <div class="login-card">
-            <h1 style="color: var(--dark-blue); font-size: 2.5rem;">vNAS <span style="color:var(--primary-red)">Hub</span></h1>
-            <p style="margin-bottom: 2rem; color: #666;">Norwegian Virtual Airline System</p>
+            <div class="logo-text">vNAS <span>Hub</span></div>
+            <p style="color: #666; font-weight: 400;">Virtual Norwegian Airline System</p>
             <button class="discord-btn" onclick="loginWithDiscord()">
-                <i class="fab fa-discord"></i> Login with Discord
+                <i class="fab fa-discord"></i> AUTHENTICATE WITH DISCORD
             </button>
+            <p style="margin-top: 2rem; font-size: 0.7rem; color: #aaa;">Secure OAuth2 Dashboard Access</p>
         </div>
     </div>
 
     <div id="dashboardSection">
         <nav class="sidebar">
-            <div class="brand">vNAS <span>Hub</span></div>
+            <div class="logo-text" style="font-size: 1.5rem;">vNAS <span>Hub</span></div>
             <ul class="nav-links">
-                <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="#"><i class="fas fa-plane"></i> Flights</a></li>
-                <li><a href="#"><i class="fas fa-map-marked-alt"></i> Planning</a></li>
+                <li><a href="#" class="active"><i class="fas fa-th-large"></i> DASHBOARD</a></li>
+                <li><a href="#"><i class="fas fa-paper-plane"></i> MY FLIGHTS</a></li>
+                <li><a href="#"><i class="fas fa-route"></i> ROUTE MAP</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> SETTINGS</a></li>
             </ul>
-            <a href="#" onclick="logout()" style="color: #ff7675; text-decoration: none; font-size: 0.9rem;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="#" onclick="logout()" style="color: #666; text-decoration: none; font-size: 0.8rem; font-weight: bold; padding: 10px 18px;">
+                <i class="fas fa-power-off"></i> LOGOUT
+            </a>
         </nav>
 
         <main class="content">
             <header class="header-bar">
-                <h2 id="welcomeText">Welcome, Captain</h2>
+                <div>
+                    <h1 style="font-weight: 800; font-size: 2rem;">Captain's Deck</h1>
+                    <p style="color: #888;" id="currentDate"></p>
+                </div>
                 <div class="profile-snip">
-                    <img id="userAvatar" class="avatar" src="" alt="">
-                    <strong id="userName">Loading...</strong>
+                    <img id="userAvatar" class="avatar" src="https://via.placeholder.com/40" alt="Avatar">
+                    <strong id="userName">User</strong>
                 </div>
             </header>
 
             <div class="dashboard-grid">
                 <div class="left-col">
                     <section class="card">
-                        <div class="card-title">Register Flight</div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <input type="text" placeholder="DEP ICAO (e.g. ENGM)">
-                            <input type="text" placeholder="ARR ICAO (e.g. ENBR)">
-                        </div>
-                        <button class="btn-primary">File Flight Plan</button>
+                        <div class="card-title">Flight Dispatch</div>
+                        <form id="flightForm">
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>Departure ICAO</label>
+                                    <input type="text" id="depIcao" placeholder="ENGM" required maxlength="4">
+                                </div>
+                                <div class="input-group">
+                                    <label>Arrival ICAO</label>
+                                    <input type="text" id="arrIcao" placeholder="ENBR" required maxlength="4">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>Aircraft Type</label>
+                                    <input type="text" id="aircraft" placeholder="B738" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Callsign</label>
+                                    <input type="text" id="callsign" placeholder="NAX123" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-nas">File Flight Plan</button>
+                        </form>
                     </section>
 
                     <section class="card">
-                        <div class="card-title">Recent Flights</div>
-                        <table>
-                            <thead><tr><th>Route</th><th>Status</th></tr></thead>
-                            <tbody>
-                                <tr><td><strong>ENGM - ENBR</strong></td><td><span style="color: green;">● Completed</span></td></tr>
-                                <tr><td><strong>ENGM - EGKK</strong></td><td><span style="color: orange;">● Scheduled</span></td></tr>
-                            </tbody>
+                        <div class="card-title">Live Operations</div>
+                        <table id="flightTable">
+                            <thead>
+                                <tr>
+                                    <th>Callsign</th>
+                                    <th>Route</th>
+                                    <th>Aircraft</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="flightBody">
+                                </tbody>
                         </table>
                     </section>
                 </div>
 
                 <div class="right-col">
-                    <section class="card" style="text-align: center;">
-                        <div class="card-title">Your Stats</div>
-                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary-red);">12.5</div>
-                        <p style="font-size: 0.7rem; text-transform: uppercase;">Flight Hours</p>
+                    <section class="card" style="background: var(--nas-blue); color: white;">
+                        <div class="card-title" style="color: white;">Career Overview</div>
+                        <div style="margin-top: 2rem;">
+                            <h3 style="font-size: 3rem; font-weight: 800;">142.8</h3>
+                            <p style="opacity: 0.7; font-size: 0.8rem; letter-spacing: 1px;">TOTAL BLOCK HOURS</p>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+                            <div>
+                                <h4 id="flightCount">0</h4>
+                                <p style="font-size: 0.6rem; opacity: 0.6;">FLIGHTS</p>
+                            </div>
+                            <div>
+                                <h4>A+</h4>
+                                <p style="font-size: 0.6rem; opacity: 0.6;">RANKING</p>
+                            </div>
+                        </div>
                     </section>
                 </div>
             </div>
@@ -153,12 +304,13 @@
     </div>
 
     <script>
-        // CONFIGURATION: Replace these with your own from Discord Developer Portal
         const CLIENT_ID = '1429242117506470019'; 
-        const REDIRECT_URI = window.location.href.split('#')[0]; // Auto-detects current page
+        const REDIRECT_URI = window.location.href.split('#')[0];
+        
+        // Update Date
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
         function loginWithDiscord() {
-            // This URL opens the Discord OAuth2 screen
             const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
             window.location.href = url;
         }
@@ -168,7 +320,6 @@
             const accessToken = fragment.get('access_token');
 
             if (accessToken) {
-                // We have a token! Show dashboard and fetch user data
                 document.getElementById('loginSection').style.display = 'none';
                 document.getElementById('dashboardSection').style.display = 'grid';
 
@@ -177,18 +328,55 @@
                 })
                 .then(res => res.json())
                 .then(user => {
-                    document.getElementById('userName').innerText = user.username;
-                    document.getElementById('welcomeText').innerText = `Welcome Back, ${user.username}`;
+                    document.getElementById('userName').innerText = user.username.toUpperCase();
                     if (user.avatar) {
                         document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
                     }
-                })
-                .catch(err => console.error("Error fetching user:", err));
+                });
+                loadFlights();
             }
         };
 
+        // Functional Flight Dispatch System
+        document.getElementById('flightForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const flight = {
+                callsign: document.getElementById('callsign').value.toUpperCase(),
+                route: `${document.getElementById('depIcao').value.toUpperCase()} - ${document.getElementById('arrIcao').value.toUpperCase()}`,
+                aircraft: document.getElementById('aircraft').value.toUpperCase(),
+                status: 'EN ROUTE'
+            };
+
+            let flights = JSON.parse(localStorage.getItem('vnas_flights')) || [];
+            flights.unshift(flight);
+            localStorage.setItem('vnas_flights', JSON.stringify(flights));
+            
+            e.target.reset();
+            loadFlights();
+        });
+
+        function loadFlights() {
+            const flights = JSON.parse(localStorage.getItem('vnas_flights')) || [
+                { callsign: 'NAX442', route: 'ENGM - ENBR', aircraft: 'B738', status: 'ARRIVED' }
+            ];
+            const body = document.getElementById('flightBody');
+            body.innerHTML = '';
+            
+            flights.forEach(f => {
+                body.innerHTML += `
+                    <tr>
+                        <td><strong>${f.callsign}</strong></td>
+                        <td>${f.route}</td>
+                        <td>${f.aircraft}</td>
+                        <td><span class="status-badge">${f.status}</span></td>
+                    </tr>
+                `;
+            });
+            document.getElementById('flightCount').innerText = flights.length;
+        }
+
         function logout() {
-            window.location.href = REDIRECT_URI; // Refresh and clear token from URL
+            window.location.href = REDIRECT_URI;
         }
     </script>
 </body>
