@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vNAS Hub | Norwegian Virtual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vnasRed: '#e71c2a',
+                        vnasBlue: '#15273f',
+                        vnasGray: '#f4f4f7',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-link:hover { background-color: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="bg-vnasGray text-vnasBlue">
+
+    <div id="login-page" class="min-h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(21, 39, 63, 0.8), rgba(21, 39, 63, 0.8)), url('https://images.unsplash.com/photo-1436491865332-7a61a109c0f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+        <div class="bg-white p-10 rounded-2xl shadow-2xl text-center max-w-md w-full mx-4">
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold text-vnasBlue"><span class="text-vnasRed">vNAS</span> HUB</h1>
+                <p class="text-gray-500 mt-2">Norwegian Virtual Airline System</p>
+            </div>
+            <p class="mb-8 text-sm text-gray-600">Vennligst logg inn med din Discord-konto for å få tilgang til pilotsenteret.</p>
+            <button onclick="showDashboard()" class="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-bold py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center gap-3">
+                <i class="fab fa-discord text-xl"></i>
+                Logg inn med Discord
+            </button>
+        </div>
+    </div>
+
+    <div id="dashboard" class="hidden min-h-screen flex flex-col md:flex-row">
+        
+        <nav class="w-full md:w-64 bg-vnasBlue text-white flex flex-col">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold"><span class="text-vnasRed">vNAS</span> HUB</h2>
+            </div>
+            <div class="flex-grow">
+                <a href="#" class="sidebar-link flex items-center gap-4 px-6 py-4 transition bg-white/10 border-l-4 border-vnasRed">
+                    <i class="fas fa-th-large w-5"></i> Dashboard
+                </a>
+                <a href="#" class="sidebar-link flex items-center gap-4 px-6 py-4 transition text-gray-400">
+                    <i class="fas fa-plane w-5"></i> Mine Flyvninger
+                </a>
+                <a href="#" class="sidebar-link flex items-center gap-4 px-6 py-4 transition text-gray-400">
+                    <i class="fas fa-map-marked-alt w-5"></i> Ruteplanlegger
+                </a>
+                <a href="#" class="sidebar-link flex items-center gap-4 px-6 py-4 transition text-gray-400">
+                    <i class="fas fa-trophy w-5"></i> Leaderboard
+                </a>
+            </div>
+            <div class="p-6 border-t border-white/10">
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="https://ui-avatars.com/api/?name=Pilot+User&background=e71c2a&color=fff" class="w-10 h-10 rounded-full border border-gray-500" alt="Avatar">
+                    <div>
+                        <p class="text-sm font-semibold">Pilot #4202</p>
+                        <p class="text-xs text-gray-400">Logget inn</p>
+                    </div>
+                </div>
+                <button onclick="showLogin()" class="text-sm text-gray-400 hover:text-vnasRed transition">Logg ut</button>
+            </div>
+        </nav>
+
+        <main class="flex-grow p-6 md:p-10 overflow-y-auto">
+            <header class="flex justify-between items-center mb-10">
+                <div>
+                    <h1 class="text-3xl font-bold">Velkommen tilbake, Kaptein!</h1>
+                    <p class="text-gray-500">Klar for din neste flyvning med Norwegian?</p>
+                </div>
+                <button class="bg-vnasRed hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full shadow-lg transition">
+                    + Ny Flyvning
+                </button>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <p class="text-gray-400 text-sm font-semibold uppercase">Flytimer totalt</p>
+                    <h3 class="text-4xl font-bold mt-2">128.5</h3>
+                    <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> 12% denne måneden</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <p class="text-gray-400 text-sm font-semibold uppercase">Fullførte ruter</p>
+                    <h3 class="text-4xl font-bold mt-2">54</h3>
+                    <p class="text-gray-500 text-sm mt-2 font-medium underline">Se loggbok</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <p class="text-gray-400 text-sm font-semibold uppercase">Nåværende Rank</p>
+                    <h3 class="text-4xl font-bold mt-2 text-vnasRed">Senior Captain</h3>
+                    <p class="text-gray-500 text-sm mt-2">Neste: Flight Instructor</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Siste flyvninger</h2>
+                    <a href="#" class="text-vnasRed text-sm font-bold">Se alle</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-gray-400 text-xs uppercase">
+                            <tr>
+                                <th class="px-6 py-4">Dato</th>
+                                <th class="px-6 py-4">Rute (ICAO)</th>
+                                <th class="px-6 py-4">Flytype</th>
+                                <th class="px-6 py-4">Tid</th>
+                                <th class="px-6 py-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="px-6 py-4 text-sm">24. Mai 2024</td>
+                                <td class="px-6 py-4 font-semibold">ENGM <i class="fas fa-arrow-right text-xs mx-2 text-gray-300"></i> ENBR</td>
+                                <td class="px-6 py-4 text-sm">B738</td>
+                                <td class="px-6 py-4 text-sm">0h 55m</td>
+                                <td class="px-6 py-4"><span class="bg-green-100 text-green-700 py-1 px-3 rounded-full text-xs font-bold uppercase">Fullført</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm">22. Mai 2024</td>
+                                <td class="px-6 py-4 font-semibold">EKCH <i class="fas fa-arrow-right text-xs mx-2 text-gray-300"></i> ENGM</td>
+                                <td class="px-6 py-4 text-sm">B38M</td>
+                                <td class="px-6 py-4 text-sm">1h 10m</td>
+                                <td class="px-6 py-4"><span class="bg-green-100 text-green-700 py-1 px-3 rounded-full text-xs font-bold uppercase">Fullført</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm">28. Mai 2024</td>
+                                <td class="px-6 py-4 font-semibold">ENGM <i class="fas fa-arrow-right text-xs mx-2 text-gray-300"></i> LEPA</td>
+                                <td class="px-6 py-4 text-sm">B738</td>
+                                <td class="px-6 py-4 text-sm">3h 25m</td>
+                                <td class="px-6 py-4"><span class="bg-blue-100 text-blue-700 py-1 px-3 rounded-full text-xs font-bold uppercase">Planlagt</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showDashboard() {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
