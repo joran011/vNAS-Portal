@@ -1,161 +1,194 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vNAS Hub | Norwegian Virtual</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>vNAS Hub | Norwegian Virtual Airline System</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        vnasRed: '#e71c2a',
-                        vnasBlue: '#15273f',
-                        vnasGray: '#f4f4f7',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .sidebar-link:hover { background-color: rgba(255,255,255,0.1); }
+        :root {
+            --primary-red: #e71c2a;
+            --dark-blue: #15273f;
+            --bg-white: #f8f9fa;
+            --sidebar-width: 260px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-white); color: #333; overflow-x: hidden; }
+
+        /* --- LOGIN SCREEN --- */
+        #loginSection {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--dark-blue) 0%, #1c3a5f 100%);
+        }
+
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            border-top: 6px solid var(--primary-red);
+        }
+
+        .discord-btn {
+            background-color: #5865F2;
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: var(--radius);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        /* --- DASHBOARD (Hidden by default) --- */
+        #dashboardSection { display: none; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100vh; }
+
+        nav.sidebar { background-color: var(--dark-blue); color: white; padding: 2rem 1.5rem; display: flex; flex-direction: column; }
+        .brand { font-size: 1.5rem; font-weight: bold; margin-bottom: 3rem; }
+        .brand span { color: var(--primary-red); }
+
+        .nav-links { list-style: none; flex-grow: 1; }
+        .nav-links a { color: #bdc3c7; text-decoration: none; padding: 12px 15px; display: flex; align-items: center; gap: 12px; border-radius: var(--radius); margin-bottom: 5px; }
+        .nav-links a.active, .nav-links a:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        .content { padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+
+        .profile-snip { display: flex; align-items: center; gap: 12px; background: white; padding: 8px 16px; border-radius: 50px; box-shadow: var(--shadow); }
+        .avatar { width: 35px; height: 35px; border-radius: 50%; background: #eee; object-fit: cover; }
+
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .card { background: white; border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 20px; }
+        .card-title { font-weight: bold; margin-bottom: 1.2rem; border-left: 4px solid var(--primary-red); padding-left: 10px; color: var(--dark-blue); }
+
+        input, select, .btn-primary { width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #ddd; }
+        .btn-primary { background: var(--primary-red); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: #777; font-size: 0.8rem; padding: 10px; border-bottom: 1px solid #eee; }
+        td { padding: 12px 10px; border-bottom: 1px solid #f9f9f9; }
+
+        @media (max-width: 900px) { #dashboardSection { grid-template-columns: 1fr; } .sidebar { display: none; } .dashboard-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
-<body class="bg-vnasGray text-vnasBlue">
+<body>
 
-    <div id="login-page" class="min-h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(21, 39, 63, 0.8), rgba(21, 39, 63, 0.8)), url('https://images.unsplash.com/photo-1436491865332-7a61a109c0f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-        <div class="bg-white p-10 rounded-2xl shadow-2xl text-center max-w-md w-full mx-4">
-            <div class="mb-6">
-                <h1 class="text-3xl font-bold text-vnasBlue"><span class="text-vnasRed">vNAS</span> HUB</h1>
-                <p class="text-gray-500 mt-2">Norwegian Virtual Airline System</p>
-            </div>
-            <p class="mb-8 text-sm text-gray-600">Vennligst logg inn med din Discord-konto for å få tilgang til pilotsenteret.</p>
-            <button onclick="showDashboard()" class="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-bold py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center gap-3">
-                <i class="fab fa-discord text-xl"></i>
-                Logg inn med Discord
+    <div id="loginSection">
+        <div class="login-card">
+            <h1 style="color: var(--dark-blue); font-size: 2.5rem;">vNAS <span style="color:var(--primary-red)">Hub</span></h1>
+            <p style="margin-bottom: 2rem; color: #666;">Norwegian Virtual Airline System</p>
+            <button class="discord-btn" onclick="loginWithDiscord()">
+                <i class="fab fa-discord"></i> Login with Discord
             </button>
         </div>
     </div>
 
-    <div id="dashboard" class="hidden min-h-screen flex flex-col md:flex-row">
-        
-        <nav class="w-full md:w-64 bg-vnasBlue text-white flex flex-col">
-            <div class="p-6">
-                <h2 class="text-2xl font-bold"><span class="text-vnasRed">vNAS</span> HUB</h2>
-            </div>
-            <div class="flex-grow">
-                <a href="#" class="sidebar-link flex items-center gap-4 px-6 py-4 transition bg-white/10 border-l-4 border-vnasRed">
-                    <i class="fas fa-th-large w-5"></i> Dashboard
-                </a>
-                <a href="#" class="sidebar-link flex items-center gap-4 px-6 py-4 transition text-gray-400">
-                    <i class="fas fa-plane w-5"></i> Mine Flyvninger
-                </a>
-                <a href="#" class="sidebar-link flex items-center gap-4 px-6 py-4 transition text-gray-400">
-                    <i class="fas fa-map-marked-alt w-5"></i> Ruteplanlegger
-                </a>
-                <a href="#" class="sidebar-link flex items-center gap-4 px-6 py-4 transition text-gray-400">
-                    <i class="fas fa-trophy w-5"></i> Leaderboard
-                </a>
-            </div>
-            <div class="p-6 border-t border-white/10">
-                <div class="flex items-center gap-3 mb-4">
-                    <img src="https://ui-avatars.com/api/?name=Pilot+User&background=e71c2a&color=fff" class="w-10 h-10 rounded-full border border-gray-500" alt="Avatar">
-                    <div>
-                        <p class="text-sm font-semibold">Pilot #4202</p>
-                        <p class="text-xs text-gray-400">Logget inn</p>
-                    </div>
-                </div>
-                <button onclick="showLogin()" class="text-sm text-gray-400 hover:text-vnasRed transition">Logg ut</button>
-            </div>
+    <div id="dashboardSection">
+        <nav class="sidebar">
+            <div class="brand">vNAS <span>Hub</span></div>
+            <ul class="nav-links">
+                <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#"><i class="fas fa-plane"></i> Flights</a></li>
+                <li><a href="#"><i class="fas fa-map-marked-alt"></i> Planning</a></li>
+            </ul>
+            <a href="#" onclick="logout()" style="color: #ff7675; text-decoration: none; font-size: 0.9rem;"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </nav>
 
-        <main class="flex-grow p-6 md:p-10 overflow-y-auto">
-            <header class="flex justify-between items-center mb-10">
-                <div>
-                    <h1 class="text-3xl font-bold">Velkommen tilbake, Kaptein!</h1>
-                    <p class="text-gray-500">Klar for din neste flyvning med Norwegian?</p>
+        <main class="content">
+            <header class="header-bar">
+                <h2 id="welcomeText">Welcome, Captain</h2>
+                <div class="profile-snip">
+                    <img id="userAvatar" class="avatar" src="" alt="">
+                    <strong id="userName">Loading...</strong>
                 </div>
-                <button class="bg-vnasRed hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full shadow-lg transition">
-                    + Ny Flyvning
-                </button>
             </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-gray-400 text-sm font-semibold uppercase">Flytimer totalt</p>
-                    <h3 class="text-4xl font-bold mt-2">128.5</h3>
-                    <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> 12% denne måneden</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-gray-400 text-sm font-semibold uppercase">Fullførte ruter</p>
-                    <h3 class="text-4xl font-bold mt-2">54</h3>
-                    <p class="text-gray-500 text-sm mt-2 font-medium underline">Se loggbok</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-gray-400 text-sm font-semibold uppercase">Nåværende Rank</p>
-                    <h3 class="text-4xl font-bold mt-2 text-vnasRed">Senior Captain</h3>
-                    <p class="text-gray-500 text-sm mt-2">Neste: Flight Instructor</p>
-                </div>
-            </div>
+            <div class="dashboard-grid">
+                <div class="left-col">
+                    <section class="card">
+                        <div class="card-title">Register Flight</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <input type="text" placeholder="DEP ICAO (e.g. ENGM)">
+                            <input type="text" placeholder="ARR ICAO (e.g. ENBR)">
+                        </div>
+                        <button class="btn-primary">File Flight Plan</button>
+                    </section>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-                <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                    <h2 class="text-xl font-bold">Siste flyvninger</h2>
-                    <a href="#" class="text-vnasRed text-sm font-bold">Se alle</a>
+                    <section class="card">
+                        <div class="card-title">Recent Flights</div>
+                        <table>
+                            <thead><tr><th>Route</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>ENGM - ENBR</strong></td><td><span style="color: green;">● Completed</span></td></tr>
+                                <tr><td><strong>ENGM - EGKK</strong></td><td><span style="color: orange;">● Scheduled</span></td></tr>
+                            </tbody>
+                        </table>
+                    </section>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 text-gray-400 text-xs uppercase">
-                            <tr>
-                                <th class="px-6 py-4">Dato</th>
-                                <th class="px-6 py-4">Rute (ICAO)</th>
-                                <th class="px-6 py-4">Flytype</th>
-                                <th class="px-6 py-4">Tid</th>
-                                <th class="px-6 py-4">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <tr>
-                                <td class="px-6 py-4 text-sm">24. Mai 2024</td>
-                                <td class="px-6 py-4 font-semibold">ENGM <i class="fas fa-arrow-right text-xs mx-2 text-gray-300"></i> ENBR</td>
-                                <td class="px-6 py-4 text-sm">B738</td>
-                                <td class="px-6 py-4 text-sm">0h 55m</td>
-                                <td class="px-6 py-4"><span class="bg-green-100 text-green-700 py-1 px-3 rounded-full text-xs font-bold uppercase">Fullført</span></td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-sm">22. Mai 2024</td>
-                                <td class="px-6 py-4 font-semibold">EKCH <i class="fas fa-arrow-right text-xs mx-2 text-gray-300"></i> ENGM</td>
-                                <td class="px-6 py-4 text-sm">B38M</td>
-                                <td class="px-6 py-4 text-sm">1h 10m</td>
-                                <td class="px-6 py-4"><span class="bg-green-100 text-green-700 py-1 px-3 rounded-full text-xs font-bold uppercase">Fullført</span></td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-sm">28. Mai 2024</td>
-                                <td class="px-6 py-4 font-semibold">ENGM <i class="fas fa-arrow-right text-xs mx-2 text-gray-300"></i> LEPA</td>
-                                <td class="px-6 py-4 text-sm">B738</td>
-                                <td class="px-6 py-4 text-sm">3h 25m</td>
-                                <td class="px-6 py-4"><span class="bg-blue-100 text-blue-700 py-1 px-3 rounded-full text-xs font-bold uppercase">Planlagt</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                <div class="right-col">
+                    <section class="card" style="text-align: center;">
+                        <div class="card-title">Your Stats</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary-red);">12.5</div>
+                        <p style="font-size: 0.7rem; text-transform: uppercase;">Flight Hours</p>
+                    </section>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        function showDashboard() {
-            document.getElementById('login-page').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
+        // CONFIGURATION: Replace these with your own from Discord Developer Portal
+        const CLIENT_ID = '1429242117506470019'; 
+        const REDIRECT_URI = window.location.href.split('#')[0]; // Auto-detects current page
+
+        function loginWithDiscord() {
+            // This URL opens the Discord OAuth2 screen
+            const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
+            window.location.href = url;
         }
 
-        function showLogin() {
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('login-page').classList.remove('hidden');
+        window.onload = () => {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const accessToken = fragment.get('access_token');
+
+            if (accessToken) {
+                // We have a token! Show dashboard and fetch user data
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('dashboardSection').style.display = 'grid';
+
+                fetch('https://discord.com/api/users/@me', {
+                    headers: { authorization: `Bearer ${accessToken}` }
+                })
+                .then(res => res.json())
+                .then(user => {
+                    document.getElementById('userName').innerText = user.username;
+                    document.getElementById('welcomeText').innerText = `Welcome Back, ${user.username}`;
+                    if (user.avatar) {
+                        document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                    }
+                })
+                .catch(err => console.error("Error fetching user:", err));
+            }
+        };
+
+        function logout() {
+            window.location.href = REDIRECT_URI; // Refresh and clear token from URL
         }
     </script>
 </body>
